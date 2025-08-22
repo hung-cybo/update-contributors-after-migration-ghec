@@ -1,0 +1,12 @@
+{
+  "username_mapping": {
+    "old-username": "new-username"
+  },
+  "description": "Username mappings from GHES to GHEC migration",
+  "notes": [
+    "Add old usernames as keys and new usernames as values",
+    "The script will only replace @username mentions (usernames starting with @)",
+    "Standalone usernames (without @) will NOT be replaced",
+    "This prevents any recursive replacement issues and keeps the logic simple"
+  ]
+}

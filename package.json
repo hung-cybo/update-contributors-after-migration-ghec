@@ -1,0 +1,28 @@
+{
+  "name": "update-contributors-after-migration-ghec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/**/*.mjs",
+    "lint:fix": "eslint src/**/*.mjs --fix",
+    "format": "prettier --write src/**/*.mjs",
+    "format:check": "prettier --check src/**/*.mjs",
+    "update": "node src/update-release-contributors.mjs",
+    "update:test": "node src/test-single-repo.mjs",
+    "restore-from-backup": "node src/restore-from-backup.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^22.0.0",
+    "dotenv": "^17.2.1"
+  },
+  "devDependencies": {
+    "@cybozu/eslint-config": "^24.2.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.6.2"
+  }
+}

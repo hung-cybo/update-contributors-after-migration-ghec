@@ -1,0 +1,7 @@
+node_modules/
+backups/
+test-backups/
+*.log
+*.json
+package-lock.json
+.env

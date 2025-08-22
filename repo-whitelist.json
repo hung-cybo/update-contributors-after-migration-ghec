@@ -1,0 +1,12 @@
+{
+  "repository_whitelist": [
+    "your-repo-name"
+  ],
+  "description": "List of repositories to process for release contributor updates",
+  "notes": [
+    "Add repository names (not full URLs) to this list",
+    "Only these repositories will be processed",
+    "Repositories not in this list will be skipped",
+    "Use exact repository names as they appear on GitHub"
+  ]
+}

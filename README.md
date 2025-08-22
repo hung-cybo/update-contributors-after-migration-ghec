@@ -1,14 +1,15 @@
 # Release Contributor Update Script
 
-This script helps you update all releases across your repositories to fix contributor usernames after migrating from GitHub Enterprise Server (GHES) to GitHub Enterprise Cloud (GHEC).
+This script helps you update release notes across your repositories to fix contributor usernames after migrating from GitHub Enterprise Server (GHES) to GitHub Enterprise Cloud (GHEC).
 
 ## What it does
 
 - Processes only repositories specified in a whitelist (instead of all repositories)
 - Gets all releases for each whitelisted repository
-- Updates release notes by replacing old usernames with new ones
+- Updates release notes content by replacing old usernames with new ones
 - **Only updates `@username` mentions (usernames starting with @)**
 - **Does NOT update standalone usernames (without @)**
+- **Does NOT modify release metadata, tags, or other release properties**
 - Provides detailed logging and progress tracking
 - Respects GitHub API rate limits
 - Verifies repository accessibility before processing
@@ -28,12 +29,14 @@ This script helps you update all releases across your repositories to fix contri
 1. **Clone or download this repository**
 
 2. **Install dependencies** (if not already installed):
+
    ```bash
    npm install
    ```
 
 3. **Configure username mappings**:
    Edit `username-mapping.json` to add your username mappings:
+
    ```json
    {
      "username_mapping": {
@@ -45,18 +48,16 @@ This script helps you update all releases across your repositories to fix contri
 
 4. **Configure repository whitelist**:
    Edit `repo-whitelist.json` to specify which repositories to process:
+
    ```json
    {
-     "repository_whitelist": [
-       "repo-name-1",
-       "repo-name-2",
-       "repo-name-3"
-     ]
+     "repository_whitelist": ["repo-name-1", "repo-name-2", "repo-name-3"]
    }
    ```
 
 5. **Configure environment variables**:
    Create a `.env` file in your project root with the following variables:
+
    ```bash
    # Required: GitHub Personal Access Token
    GITHUB_TOKEN=your_github_personal_access_token_here
@@ -69,6 +70,7 @@ This script helps you update all releases across your repositories to fix contri
 ## Usage
 
 ### Run the script using npm scripts (recommended):
+
 ```bash
 # Update all repositories in the whitelist
 npm run update
@@ -81,6 +83,7 @@ npm run restore-from-backup
 ```
 
 ### Run the script directly:
+
 ```bash
 node src/update-release-contributors.mjs
 ```
@@ -91,7 +94,7 @@ node src/update-release-contributors.mjs
 2. **Verify repositories**: Checks that each whitelisted repository exists and is accessible
 3. **Create backups**: Automatically backs up all release notes before making changes
 4. **Process each repository**: For each whitelisted repo, fetches all releases
-5. **Update releases**: Updates release notes with corrected usernames
+5. **Update release notes**: Updates only the release notes content with corrected usernames
 6. **Progress tracking**: Shows detailed progress and summary
 7. **Error handling**: Continues processing even if some updates fail
 8. **Create backup index**: Generates a master index of all backups created
@@ -109,6 +112,7 @@ node src/update-release-contributors.mjs
 ## Backup and Restore
 
 ### Automatic Backups
+
 The script automatically creates comprehensive backups before making any changes:
 
 - **Backup location**: `./backups/{owner}/{repo}/releases-backup-{timestamp}.json`
@@ -116,6 +120,7 @@ The script automatically creates comprehensive backups before making any changes
 - **Backup index**: Master index file at `./backups/backup-index.json` listing all backups
 
 ### Restore from Backup
+
 If you need to restore releases from backup:
 
 ```bash
@@ -127,13 +132,16 @@ node src/restore-from-backup.mjs
 ```
 
 The restore tool will:
+
 - List all available backups
 - Allow you to select which repository to restore
 - Restore all releases for that repository from the backup
 - Match releases by tag name to ensure correct restoration
 
 ### Backup Structure
+
 Each backup file contains:
+
 ```json
 {
   "repository": "owner/repo",
@@ -158,6 +166,7 @@ Each backup file contains:
 Instead of processing all repositories in your organization, the script uses a whitelist approach for better control and safety:
 
 ### Benefits of Whitelist Approach:
+
 - **Selective processing**: Only update repositories you specifically choose
 - **Safety**: Prevents accidental updates to repositories you don't want to modify
 - **Efficiency**: Faster execution by skipping irrelevant repositories
@@ -165,34 +174,34 @@ Instead of processing all repositories in your organization, the script uses a w
 - **Testing**: Can test on a few repositories before running on all
 
 ### Managing the Whitelist:
+
 Edit `repo-whitelist.json` to control which repositories are processed:
 
 ```json
 {
-  "repository_whitelist": [
-    "repo-name-1",
-    "repo-name-2",
-    "repo-name-3"
-  ]
+  "repository_whitelist": ["repo-name-1", "repo-name-2", "repo-name-3"]
 }
 ```
 
 ### Adding Repositories:
+
 1. Add repository names (not full URLs) to the whitelist
 2. Repository names must match exactly as they appear on GitHub
 3. The script will verify each repository exists and is accessible
 4. Repositories not in the whitelist will be completely skipped
 
 ### Repository Verification:
+
 The script automatically verifies each whitelisted repository:
+
 - ✅ **Accessible**: Repository exists and can be accessed
 - ❌ **Not found**: Repository doesn't exist or isn't accessible
 - ⚠️ **Error**: Other issues (permissions, etc.)
 
-
 ## Troubleshooting
 
 ### "No repositories found"
+
 - Check that the `OWNER` env variable is set correctly
 - Verify your GitHub token has the necessary permissions
 - Make sure the user/organization exists and is accessible
@@ -200,16 +209,19 @@ The script automatically verifies each whitelisted repository:
 - Ensure the whitelisted repositories exist and are accessible
 
 ### "Error updating release"
+
 - Check that your token has write access to the repository
 - Verify the repository isn't archived or disabled
 - Check GitHub's status page for any API issues
 
 ### Rate limiting issues
+
 - The script includes built-in delays, but if you're still hitting limits, increase the delay values
 - Consider running during off-peak hours
 - Use a token with higher rate limits if available
 
 ### Environment variable issues
+
 - **"Missing required environment variables"**: Check your `.env` file exists and contains all required variables
 - **".env file not found"**: Ensure the `.env` file is in your project root directory
 - **"Error loading environment variables"**: Check file permissions and syntax in your `.env` file
@@ -226,6 +238,7 @@ The script automatically verifies each whitelisted repository:
 ## Support
 
 If you encounter issues:
+
 1. Check the console output for detailed error messages
 2. Verify your GitHub token permissions
 3. Ensure the target repositories are accessible
